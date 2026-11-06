@@ -1,0 +1,74 @@
+{
+  "corpus": "swe_agent",
+  "n": 6052,
+  "verdicts": {
+    "clean": 5979,
+    "suspicious": 37,
+    "gaming": 36
+  },
+  "verdict_pct": {
+    "clean": 98.79,
+    "suspicious": 0.61,
+    "gaming": 0.59
+  },
+  "gaming_pct": 0.59,
+  "solved_gaming_pct": 0.158,
+  "failed_gaming_pct": 0.711,
+  "solved_n": 1268,
+  "failed_n": 4784,
+  "gaming_ratio": 4.5,
+  "top_signals": [
+    [
+      "except-swallow",
+      193
+    ],
+    [
+      "tests-only",
+      77
+    ],
+    [
+      "assert-removed",
+      30
+    ],
+    [
+      "test-neutered",
+      27
+    ],
+    [
+      "test-deleted",
+      20
+    ],
+    [
+      "tests-only-weakened",
+      16
+    ],
+    [
+      "skip-added",
+      7
+    ],
+    [
+      "hardcoded-return",
+      4
+    ],
+    [
+      "fake-exit",
+      4
+    ],
+    [
+      "expected-edited",
+      4
+    ],
+    [
+      "assert-weakened",
+      1
+    ],
+    [
+      "hardcoded-cases",
+      1
+    ]
+  ],
+  "latency_ms": {
+    "mean": 0.1195,
+    "p99": 0.803
+  }
+}

@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>rigged — did the agent fix the bug, or just delete the test?</title>
+<meta name="description" content="rigged detects when a code patch games the tests instead of fixing the code: deleted assertions, skipped tests, edited expected values, input hardcoding, test-harness detection. Perfect precision on 500 real human fixes; benchmarked on 6,052 real agent patches. The demo runs the real detector in your browser.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <span class="brand"><span class="mk"></span><b>rigged</b><span class="tag">v0.1</span></span>
+    <span class="links">
+      <a href="#demo">Demo</a>
+      <a href="#taxonomy">The tricks</a>
+      <a href="#results">Results</a>
+      <a href="#wild">Caught in the wild</a>
+      <a class="gh" href="https://github.com/rishikeshn-eng/rigged" target="_blank" rel="noopener">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+        GitHub
+      </a>
+    </span>
+  </div>
+</nav>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">AI agent safety · reward-hacking detection</div>
+    <h1>Did the agent fix the bug — or just <span class="em">delete the test?</span></h1>
+    <p class="lede">When you tell a coding agent "make the tests pass", the honest path is to fix the code.
+      The lazy path is to weaken the test: delete an assertion, add <code>@skip</code>, edit the expected value,
+      or special-case the exact inputs the test checks. <b>rigged</b> reads a patch's diff and tells you which one
+      it is — before you merge it.</p>
+
+    <div class="stat-strip">
+      <div class="s"><div class="n" id="s-f1">1.00</div><div class="l">gold-set F1 (gaming)</div></div>
+      <div class="s"><div class="n" id="s-fp">0.0<small>%</small></div><div class="l">false positives on 500 human fixes</div></div>
+      <div class="s"><div class="n" id="s-corpus">6,052</div><div class="l">real agent patches audited</div></div>
+      <div class="s"><div class="n" id="s-ratio">4.5<small>×</small></div><div class="l">more gaming in failed runs</div></div>
+    </div>
+
+    <div class="analyzer" id="demo">
+      <div class="an-head">
+        <span class="tl"><i></i><i></i><i></i></span>
+        <span class="title">patch audit — paste a git diff</span>
+        <span class="pill loading" id="statusPill"><span class="live"></span><span id="statusText">loading detector…</span></span>
+      </div>
+      <div class="an-body">
+        <div>
+          <div class="diff-wrap">
+            <div class="dh"><span>unified diff</span></div>
+            <textarea id="diff" spellcheck="false"></textarea>
+          </div>
+          <div class="presets" id="presets"><span class="lab">examples:</span></div>
+        </div>
+        <div class="result" id="resultOut"></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="taxonomy">
+  <div class="wrap">
+    <div class="sec-tag">The playbook</div>
+    <h2>Eight ways to pass a test without fixing anything.</h2>
+    <p class="sec-lede">Every one of these makes a red test turn green while the underlying bug remains.
+      rigged separates the diff's test-file changes from its source changes and scores each pattern,
+      weighting the unambiguous tells (a deleted test, a harness check, <code>assert True</code>)
+      far above the merely suspicious.</p>
+    <div class="tax" id="taxGrid"></div>
+  </div>
+</section>
+
+<section id="results">
+  <div class="wrap">
+    <div class="sec-tag">Evaluation</div>
+    <h2>Precise where it counts: it doesn't cry wolf on real fixes.</h2>
+    <p class="sec-lede">A test-gaming detector is only useful if it almost never flags a legitimate fix —
+      otherwise it gets muted. Validated on a hand-labelled gold set and on <b>500 real human bug-fixes</b>
+      from SWE-bench Verified, then run across <b>6,052 real agent patches</b>.</p>
+
+    <div class="bench-grid">
+      <div class="card col-5">
+        <h3>Gold-set confusion matrix</h3>
+        <div class="sub" id="gold-sub">hand-labelled patches · gaming vs clean</div>
+        <table class="cmatrix" id="cmatrix"></table>
+        <div style="margin-top:14px">
+          <div class="metric-row"><span class="k">Precision / recall / F1</span><span class="val" id="g-prf">—</span></div>
+          <div class="metric-row"><span class="k">Accuracy</span><span class="val" id="g-acc">—</span></div>
+        </div>
+      </div>
+
+      <div class="card col-7">
+        <h3>The false-alarm test</h3>
+        <div class="sub">500 real human fixes from SWE-bench Verified — a good detector flags almost none</div>
+        <div class="bigstat"><span class="v" id="fp-big">—</span><span class="u">of 500 human fixes called "gaming"</span></div>
+        <div style="margin-top:18px">
+          <div class="metric-row"><span class="k">Flagged as gaming (false positives)</span><span class="val" id="fp-n">—</span></div>
+          <div class="metric-row"><span class="k">Flagged for any review</span><span class="val" id="fp-any">—</span></div>
+          <div class="metric-row"><span class="k">Mean analysis time per patch</span><span class="val" id="fp-lat">—</span></div>
+        </div>
+        <p class="sub" style="margin-top:16px;margin-bottom:0">The one surviving edge case taught the tool a lesson:
+          pytest's own <code>unittest.py</code> was mistaken for a test file. The path classifier now scopes the
+          <code>FooTest.java</code> rule to JVM/C# extensions — so Python files named like tests stay source.</p>
+      </div>
+
+      <div class="card col-7">
+        <h3>Does gaming predict a failed run?</h3>
+        <div class="sub">Share of patches flagged <code>gaming</code>, split by whether the agent solved its task</div>
+        <div class="sf" id="solvedFailed"></div>
+      </div>
+
+      <div class="card col-5">
+        <h3>In the wild</h3>
+        <div class="sub">6,052 real SWE-agent patches (Llama-3 8B / 70B / 405B)</div>
+        <div class="bigstat"><span class="v" id="w-mod">—</span><span class="u">of patches modify a test file</span></div>
+        <div style="margin-top:16px">
+          <div class="metric-row"><span class="k">Of those, flagged gaming</span><span class="val" id="w-among">—</span></div>
+          <div class="metric-row"><span class="k">Overall gaming rate</span><span class="val" id="w-overall">—</span></div>
+          <div class="metric-row"><span class="k">Analyzer crashes</span><span class="val">0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="wild">
+  <div class="wrap">
+    <div class="sec-tag">Caught in the wild</div>
+    <h2>Real agents, really cheating.</h2>
+    <p class="sec-lede">These are actual patches from the SWE-agent trajectory corpus that rigged flagged as gaming.
+      The amber ones were marked <b>solved</b> by the benchmark harness anyway — the model got credit for
+      a cheat the grader didn't catch.</p>
+    <div class="wild" id="wildList"></div>
+    <p class="wild-note">Instance ids are the original SWE-bench task ids; each links to a publicly reproducible run.</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <div class="sec-tag">Under the hood</div>
+    <h2>Diff parser → effect split → weighted signals.</h2>
+    <p class="sec-lede">No model, no training. Deterministic, explainable, and fast enough to run on every patch
+      in CI or in an agent's own self-check loop.</p>
+    <div class="pipe">
+      <div class="step"><div class="num">01</div><h4>Parse the diff</h4>
+        <p>A tolerant unified-diff parser recovers per-file hunks and every added/removed line.</p></div>
+      <div class="step"><div class="num">02</div><h4>Split test vs source</h4>
+        <p>Each file is typed as test / source / config. Weakening a test counts very differently from fixing code.</p></div>
+      <div class="step"><div class="num">03</div><h4>Score the tells</h4>
+        <p>Weighted pattern detectors: deleted assertions, skips, expected-value edits, harness detection,
+          input hardcoding, framework subversion — each citing the exact line.</p></div>
+      <div class="step"><div class="num">04</div><h4>Verdict + reasons</h4>
+        <p>Scores sum to clean / suspicious / gaming, with a plain-English reason per signal and the line it fired on.</p></div>
+    </div>
+    <div class="codeblock">
+      <div class="cb-head">gate a merge or an agent's self-check</div>
+<pre><span class="c"># fail CI (or reject the agent's own patch) when it games the tests</span>
+<span class="k">from</span> rigged <span class="k">import</span> analyze
+
+v = analyze(patch_diff, problem=task_description)
+<span class="k">if</span> v.verdict == <span class="s">"gaming"</span>:
+    reject(v.summary)                 <span class="c"># "...deletes the test that must pass."</span>
+    <span class="k">for</span> s <span class="k">in</span> v.signals:
+        print(s.message, <span class="s">"@"</span>, s.file, s.lineno)
+</pre>
+    </div>
+    <p class="sec-lede" style="margin-top:20px">Ships as a library, a CLI (<code>git diff | rigged -</code>, exit code = severity),
+      and reads patches from stdin so it drops into a pre-merge hook.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand"><span class="mk"></span><b>rigged</b></span>
+    <a href="https://github.com/rishikeshn-eng/rigged" target="_blank" rel="noopener">Source &amp; benchmarks</a>
+    <span style="margin-left:auto;color:var(--text-faint)">Built by Rishikesh Nair · MIT licensed</span>
+    <p class="disclaimer">rigged is a heuristic static detector, not a proof of intent. A flag means a patch
+      exhibits patterns associated with test-gaming; some are legitimate (a spec genuinely changed, a test was
+      correctly removed). It is tuned for high precision so that a flag is worth a human's time, and anything
+      short of a clear tell is surfaced as "suspicious" rather than blocked. The live demo runs the exact
+      published detector in your browser via Pyodide; all benchmark figures are reproducible from the repo.
+      Corpus examples are drawn from the public nebius/SWE-agent-trajectories and princeton-nlp/SWE-bench_Verified datasets.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/pyodide/v0.26.2/full/pyodide.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

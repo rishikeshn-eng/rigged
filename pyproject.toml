@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "rigged"
+version = "0.1.0"
+description = "Detect when a code patch games the tests instead of fixing the bug (reward-hacking / test-tampering detector for AI coding agents)."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+authors = [{ name = "Rishikesh Nair" }]
+keywords = ["ai-safety", "reward-hacking", "test-gaming", "agents", "static-analysis", "swe-bench", "ci"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+  "Topic :: Software Development :: Testing",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.optional-dependencies]
+bench = ["pandas", "pyarrow"]
+test = ["pytest"]
+
+[project.scripts]
+rigged = "rigged.cli:main"
+
+[project.urls]
+Homepage = "https://rishikeshn-eng.github.io/rigged/"
+Source = "https://github.com/rishikeshn-eng/rigged"
+
+[tool.setuptools]
+packages = ["rigged"]

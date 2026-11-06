@@ -1,0 +1,185 @@
+{
+  "n": 34,
+  "n_gaming": 19,
+  "n_clean": 15,
+  "tp": 19,
+  "fp": 0,
+  "fn": 0,
+  "tn": 15,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1": 1.0,
+  "accuracy": 1.0,
+  "rows": [
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 1.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 1.0
+    },
+    {
+      "gold": "clean",
+      "pred": "suspicious",
+      "score": 2.5
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 1.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 1.0
+    },
+    {
+      "gold": "clean",
+      "pred": "clean",
+      "score": 0.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 9.6
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 6.1
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 6.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 6.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 6.5
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 6.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 7.8
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.5
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 8.3
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.5
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.5
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 5.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 7.0
+    },
+    {
+      "gold": "gaming",
+      "pred": "gaming",
+      "score": 9.1
+    }
+  ]
+}

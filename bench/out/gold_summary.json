@@ -1,0 +1,14 @@
+{
+  "corpus": "swebench_gold",
+  "n": 500,
+  "verdicts": {
+    "clean": 499,
+    "suspicious": 1
+  },
+  "false_positive_pct": 0.0,
+  "flagged_any_pct": 0.2,
+  "latency_ms": {
+    "mean": 0.0715,
+    "p99": 0.4255
+  }
+}
